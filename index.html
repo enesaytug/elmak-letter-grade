@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Electromechanical Energy Conversion · Harf Notu Hesaplayıcı</title>
+  <title>Electromechanical Energy Conversion · Letter Grade Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,30..100,0..1;1,9..144,300..700,30..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -540,58 +540,66 @@
   <div class="container">
     <header>
       <div>
-        <div class="eyebrow">İtü · 2025 güz dönemi</div>
-        <h1>Electromechanical Energy <em>Conversion</em></h1>
+        <div class="eyebrow">ITU · 2025-2026 Spring Term</div>
+        <h1>ELK356E - <em>ELMAK</em></h1>
       </div>
       <div class="header-meta">
-        <strong>ELK 311 · ELMAK</strong>
-        Harf notu olasılık simülatörü
+        <strong>Letter Grade Estimation Simulator</strong>
       </div>
     </header>
 
     <div class="layout">
       <div class="inputs-panel">
         <div class="formula">
-          <span>%10</span> quiz (en yüksek 2) &nbsp; <span>%25</span> M1 &nbsp; <span>%25</span> M2 &nbsp; <span>%40</span> final
+          <span>10%</span> quiz &nbsp; <span>25%</span> M1 &nbsp; <span>25%</span> M2 &nbsp; <span>40%</span> final
         </div>
 
         <div class="input-section">
           <div class="section-label">
-            <span>Quiz notları</span>
-            <span class="hint">en yüksek 2 alınır</span>
-          </div>
-          <div class="quiz-list" id="quizList"></div>
-          <button class="add-quiz" id="addQuiz">+ Quiz ekle</button>
-          <div class="quiz-meta" id="quizMeta">notları girin, en yüksek ikisi otomatik seçilecek</div>
-        </div>
-
-        <div class="input-section">
-          <div class="section-label">
-            <span>Midterm notları</span>
-            <span class="hint">her biri %25</span>
-          </div>
-          <div class="midterm-row">
-            <div class="input-group">
-              <label>Midterm 1</label>
-              <input type="number" id="m1" class="number-input" min="0" max="100" placeholder="—">
-            </div>
-            <div class="input-group">
-              <label>Midterm 2</label>
-              <input type="number" id="m2" class="number-input" min="0" max="100" placeholder="—">
-            </div>
-          </div>
-        </div>
-
-        <div class="input-section">
-          <div class="section-label">
-            <span>Final tahmini</span>
-            <span class="hint">slider'la dene</span>
+            <span>Quiz Grades</span>
+            <span class="hint">10%</span>
           </div>
           <div class="slider-header">
-            <span class="slider-label">tahmini final notu</span>
-            <span class="slider-value"><span id="finalValue">70</span><sup>/100</sup></span>
+            <span class="slider-label">Quiz 1</span>
+            <span class="slider-value"><span id="q1Value">95</span><sup>/100</sup></span>
           </div>
-          <input type="range" id="finalSlider" class="slider" min="0" max="100" value="70" step="1">
+          <input type="range" id="q1Slider" class="slider" min="0" max="100" value="95" step="1">
+
+          <div class="slider-header" style="margin-top: 15px;">
+            <span class="slider-label">Quiz 2</span>
+            <span class="slider-value"><span id="q2Value">95</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="q2Slider" class="slider" min="0" max="100" value="95" step="1">
+        </div>
+
+        <div class="input-section">
+          <div class="section-label">
+            <span>Midterm Grades</span>
+            <span class="hint">25% each</span>
+          </div>
+          <div class="slider-header">
+            <span class="slider-label">Midterm 1</span>
+            <span class="slider-value"><span id="m1Value">64</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="m1Slider" class="slider" min="0" max="100" value="64" step="1">
+
+          <div class="slider-header" style="margin-top: 15px;">
+            <span class="slider-label">Midterm 2</span>
+            <span class="slider-value"><span id="m2Value">71</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="m2Slider" class="slider" min="0" max="100" value="71" step="1">
+        </div>
+
+        <div class="input-section">
+          <div class="section-label">
+            <span>Final Estimation</span>
+            <span class="hint">40%</span>
+          </div>
+          <div class="slider-header">
+            <span class="slider-label">Final</span>
+            <span class="slider-value"><span id="finalValue">71</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="finalSlider" class="slider" min="0" max="100" value="71" step="1">
           <div class="slider-ticks">
             <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
           </div>
@@ -600,19 +608,19 @@
 
       <div class="results-card">
         <div class="result-block">
-          <div class="result-label">Ağırlıklı toplam</div>
+          <div class="result-label">Weighted total</div>
           <div class="result-value muted" id="totalValue">—</div>
-          <div class="result-sub" id="totalBreakdown">girişleri tamamla</div>
+          <div class="result-sub" id="totalBreakdown">complete entries</div>
         </div>
         <div class="result-block">
-          <div class="result-label">Tahmini harf notu</div>
+          <div class="result-label">Estimated letter grade</div>
           <div class="result-value letter muted" id="letterValue">—</div>
-          <div class="result-sub" id="letterRange">eşik bekleniyor</div>
+          <div class="result-sub" id="letterRange">waiting for threshold</div>
         </div>
         <div class="result-block">
-          <div class="result-label">Dağılımdaki yüzdeliğin</div>
+          <div class="result-label">Your percentile in distribution</div>
           <div class="result-value muted" id="percentileValue">—</div>
-          <div class="result-sub" id="percentileSub">2025 güz dönemi histogramına göre</div>
+          <div class="result-sub" id="percentileSub">based on 2025-2026 spring term histogram</div>
         </div>
       </div>
     </div>
@@ -620,13 +628,13 @@
     <div class="chart-section">
       <div class="chart-header">
         <div>
-          <h2 class="chart-title">olasılık yoğunluğu</h2>
-          <p class="chart-subtitle">Geçmiş dönemin gerçek harf notu histogramından Gauss çekirdeği ile uydurulmuş sürekli dağılım. Senin notunun pozisyonu turuncu çizgide.</p>
+          <h2 class="chart-title">probability density</h2>
+          <p class="chart-subtitle">Continuous distribution fitted with a Gaussian kernel from the actual letter grade histogram of the previous term. Your grade's position is on the orange line.</p>
         </div>
         <div class="chart-legend">
           <span class="legend-item"><span class="legend-swatch curve"></span>KDE</span>
-          <span class="legend-item"><span class="legend-swatch area"></span>altındaki alan</span>
-          <span class="legend-item"><span class="legend-swatch line"></span>senin notun</span>
+          <span class="legend-item"><span class="legend-swatch area"></span>area underneath</span>
+          <span class="legend-item"><span class="legend-swatch line"></span>your grade</span>
         </div>
       </div>
       <div class="chart-container">
@@ -634,9 +642,21 @@
       </div>
     </div>
 
+    <div class="chart-section" style="margin-top: 2rem;">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">raw histogram</h2>
+          <p class="chart-subtitle">The original histogram data provided. We convert this discrete data into a continuous probability distribution using Gaussian Kernel Density Estimation (KDE) as shown above.</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
     <footer>
-      <p>Dağılım, 2025 güz dönemi <em>Electromechanical Energy Conversion</em> dersinin gerçek harf notu histogramından (65 öğrenci, VF hariç 64 örnek) Gauss çekirdekli yoğunluk tahmini (KDE) ile üretildi. Her harf notu kovası kendi puan aralığında eşit aralıklı örneklere dağıtıldı, ardından bandwidth <code>h = 5</code> ile yumuşatıldı.</p>
-      <p>Harf eşikleri İTÜ mutlak skalasını kabul eder: <code>AA ≥ 88</code>, <code>BA+ ≥ 84</code>, <code>BA ≥ 80</code>, <code>BB+ ≥ 76</code>, <code>BB ≥ 70</code>, <code>CB+ ≥ 65</code>, <code>CB ≥ 60</code>, <code>CC+ ≥ 55</code>, <code>CC ≥ 50</code>, <code>DC+ ≥ 45</code>, <code>DC ≥ 40</code>, <code>DD+ ≥ 35</code>, <code>DD ≥ 30</code>, <code>FF &lt; 30</code>. Dersin bağıl notlandırması bu eşiklerden sapabilir.</p>
+      <p>The distribution was generated using Gaussian kernel density estimation (KDE) from the actual letter grade histogram of the 2025-2026 Spring term <em>Electromechanical Energy Conversion</em> course (65 students, 64 samples excluding VF). Each letter grade bucket was uniformly distributed into samples within its score range, then smoothed with a bandwidth of <code>h = 5</code>.</p>
+      <p>Letter grade thresholds are not based on the ITU absolute scale, but rather determined according to the histogram of the 2025-2026 Spring term Electromechanical Energy Conversion course.</p>
     </footer>
   </div>
 
@@ -720,149 +740,32 @@
       const i = letterThresholds.findIndex(t => t.letter === letter);
       const min = letterThresholds[i].min;
       const max = i === 0 ? 100 : letterThresholds[i - 1].min;
-      if (i === 0) return `${min}–100 aralığında`;
-      return `${min}–${(max - 0.01).toFixed(2)} aralığında`;
-    }
-
-    let quizCount = 3;
-    let quizValues = ['', '', ''];
-
-    const quizListEl = document.getElementById('quizList');
-    const quizMetaEl = document.getElementById('quizMeta');
-
-    function renderQuizzes() {
-      const valid = quizValues
-        .map((v, i) => ({ v: v === '' ? null : Number(v), i }))
-        .filter(o => o.v !== null && !isNaN(o.v));
-      const sorted = [...valid].sort((a, b) => b.v - a.v);
-      const topIndices = new Set(sorted.slice(0, 2).map(o => o.i));
-
-      quizListEl.innerHTML = '';
-      for (let i = 0; i < quizCount; i++) {
-        const row = document.createElement('div');
-        row.className = 'quiz-row' + (topIndices.has(i) ? ' top' : '');
-
-        const num = document.createElement('div');
-        num.className = 'quiz-num';
-        num.textContent = String(i + 1).padStart(2, '0');
-        row.appendChild(num);
-
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.className = 'quiz-input';
-        input.min = 0;
-        input.max = 100;
-        input.placeholder = 'puan';
-        input.value = quizValues[i] || '';
-        input.addEventListener('input', (e) => {
-          quizValues[i] = e.target.value;
-          updateTopHighlight();
-          compute();
-        });
-        row.appendChild(input);
-
-        const badge = document.createElement('span');
-        badge.className = 'badge';
-        badge.textContent = 'sayılır';
-        row.appendChild(badge);
-
-        if (quizCount > 2) {
-          const removeBtn = document.createElement('button');
-          removeBtn.className = 'remove-btn';
-          removeBtn.innerHTML = '×';
-          removeBtn.title = 'Quiz sil';
-          removeBtn.addEventListener('click', () => {
-            quizValues.splice(i, 1);
-            quizCount--;
-            renderQuizzes();
-            compute();
-          });
-          row.appendChild(removeBtn);
-        }
-
-        quizListEl.appendChild(row);
-      }
-
-      updateMeta(valid);
-    }
-
-    function updateTopHighlight() {
-      const valid = quizValues
-        .map((v, i) => ({ v: v === '' ? null : Number(v), i }))
-        .filter(o => o.v !== null && !isNaN(o.v));
-      const sorted = [...valid].sort((a, b) => b.v - a.v);
-      const topIndices = new Set(sorted.slice(0, 2).map(o => o.i));
-      const rows = quizListEl.querySelectorAll('.quiz-row');
-      rows.forEach((row, i) => {
-        if (topIndices.has(i)) row.classList.add('top');
-        else row.classList.remove('top');
-      });
-      updateMeta(valid);
-    }
-
-    function updateMeta(valid) {
-      if (valid.length === 0) {
-        quizMetaEl.textContent = 'notları girin, en yüksek ikisi otomatik seçilecek';
-      } else if (valid.length === 1) {
-        quizMetaEl.textContent = `quiz ${String(valid[0].i + 1).padStart(2, '0')} → ${valid[0].v} (tek quiz)`;
-      } else {
-        const sorted = [...valid].sort((a, b) => b.v - a.v);
-        const top = sorted.slice(0, 2);
-        const avg = (top[0].v + top[1].v) / 2;
-        const dropped = valid.length > 2 ? `, ${valid.length - 2} eleme` : '';
-        quizMetaEl.textContent =
-          `top 2: ${top[0].v} & ${top[1].v} → ortalama ${avg.toFixed(1)}${dropped}`;
-      }
-    }
-
-    document.getElementById('addQuiz').addEventListener('click', () => {
-      quizValues.push('');
-      quizCount++;
-      renderQuizzes();
-      compute();
-    });
-
-    function getQuizAvg() {
-      const valid = quizValues
-        .map(v => v === '' ? null : Number(v))
-        .filter(v => v !== null && !isNaN(v));
-      if (valid.length === 0) return null;
-      const sorted = [...valid].sort((a, b) => b - a);
-      const top = sorted.slice(0, 2);
-      return top.reduce((a, b) => a + b, 0) / top.length;
+      if (i === 0) return `in the ${min}–100 range`;
+      return `in the ${min}–${(max - 0.01).toFixed(2)} range`;
     }
 
     function compute() {
-      const quizAvg = getQuizAvg();
-      const m1Raw = document.getElementById('m1').value;
-      const m2Raw = document.getElementById('m2').value;
-      const m1 = m1Raw === '' ? null : Number(m1Raw);
-      const m2 = m2Raw === '' ? null : Number(m2Raw);
+      const q1 = Number(document.getElementById('q1Slider').value);
+      const q2 = Number(document.getElementById('q2Slider').value);
+      const m1 = Number(document.getElementById('m1Slider').value);
+      const m2 = Number(document.getElementById('m2Slider').value);
       const f = Number(document.getElementById('finalSlider').value);
 
+      document.getElementById('q1Value').textContent = q1;
+      document.getElementById('q2Value').textContent = q2;
+      document.getElementById('m1Value').textContent = m1;
+      document.getElementById('m2Value').textContent = m2;
       document.getElementById('finalValue').textContent = f;
 
-      let total = 0;
-      const parts = [];
-      const missing = [];
+      const quizAvg = (q1 + q2) / 2;
+      let total = (quizAvg * 0.10) + (m1 * 0.25) + (m2 * 0.25) + (f * 0.40);
 
-      if (quizAvg !== null) {
-        total += quizAvg * 0.10;
-        parts.push(`Q ${(quizAvg * 0.10).toFixed(2)}`);
-      } else { missing.push('quiz'); }
-
-      if (m1 !== null && !isNaN(m1)) {
-        total += m1 * 0.25;
-        parts.push(`M1 ${(m1 * 0.25).toFixed(2)}`);
-      } else { missing.push('M1'); }
-
-      if (m2 !== null && !isNaN(m2)) {
-        total += m2 * 0.25;
-        parts.push(`M2 ${(m2 * 0.25).toFixed(2)}`);
-      } else { missing.push('M2'); }
-
-      total += f * 0.40;
-      parts.push(`F ${(f * 0.40).toFixed(2)}`);
+      const parts = [
+        `Q ${(quizAvg * 0.10).toFixed(2)}`,
+        `M1 ${(m1 * 0.25).toFixed(2)}`,
+        `M2 ${(m2 * 0.25).toFixed(2)}`,
+        `F ${(f * 0.40).toFixed(2)}`
+      ];
 
       const totalEl = document.getElementById('totalValue');
       const breakdownEl = document.getElementById('totalBreakdown');
@@ -871,32 +774,10 @@
       const pctEl = document.getElementById('percentileValue');
       const pctSubEl = document.getElementById('percentileSub');
 
-      const hasReal = quizAvg !== null || m1 !== null || m2 !== null;
-
-      if (!hasReal) {
-        totalEl.textContent = '—';
-        totalEl.classList.add('muted');
-        breakdownEl.textContent = 'en az bir gerçek not gir';
-        breakdownEl.classList.remove('warn');
-        letterEl.textContent = '—';
-        letterEl.classList.add('muted');
-        rangeEl.textContent = 'eşik bekleniyor';
-        pctEl.textContent = '—';
-        pctEl.classList.add('muted');
-        pctSubEl.textContent = '2025 güz dönemi histogramına göre';
-        updateChart(null);
-        return;
-      }
-
       totalEl.textContent = total.toFixed(2);
       totalEl.classList.remove('muted');
       breakdownEl.textContent = parts.join(' + ') + ' = ' + total.toFixed(2);
-      if (missing.length > 0) {
-        breakdownEl.textContent += `  ·  ${missing.join(', ')} eksik`;
-        breakdownEl.classList.add('warn');
-      } else {
-        breakdownEl.classList.remove('warn');
-      }
+      breakdownEl.classList.remove('warn');
 
       const letter = getLetter(total);
       letterEl.textContent = letter;
@@ -904,9 +785,9 @@
       rangeEl.textContent = getLetterRange(letter);
 
       const pct = kdeCdf(total) * 100;
-      pctEl.textContent = `%${pct.toFixed(1)}`;
+      pctEl.textContent = `${pct.toFixed(1)}%`;
       pctEl.classList.remove('muted');
-      pctSubEl.textContent = `sınıfın yaklaşık %${(100 - pct).toFixed(0)}'inin üstünde`;
+      pctSubEl.textContent = `above approximately ${(100 - pct).toFixed(0)}% of the class`;
 
       document.documentElement.style.setProperty('--pct-fill', pct + '%');
 
@@ -1006,7 +887,7 @@
         labels: xs,
         datasets: [
           {
-            label: 'altı',
+            label: 'below',
             data: initial.below,
             borderColor: '#1B1814',
             backgroundColor: 'rgba(184, 92, 42, 0.18)',
@@ -1017,7 +898,7 @@
             spanGaps: false
           },
           {
-            label: 'üstü',
+            label: 'above',
             data: initial.above,
             borderColor: '#1B1814',
             backgroundColor: 'rgba(27, 24, 20, 0.04)',
@@ -1052,7 +933,7 @@
             border: { display: false },
             title: {
               display: true,
-              text: 'ders notu',
+              text: 'course grade',
               color: '#6B6258',
               font: { family: 'DM Sans', size: 12, style: 'italic' },
               padding: { top: 8 }
@@ -1071,11 +952,60 @@
       chart.update();
     }
 
-    document.getElementById('m1').addEventListener('input', compute);
-    document.getElementById('m2').addEventListener('input', compute);
+    const barCtx = document.getElementById('barChart');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['AA', 'BA+', 'BA', 'BB+', 'BB', 'CB+', 'CB', 'CC+', 'CC', 'DC+', 'DC', 'DD+', 'DD', 'FF', 'VF'],
+        datasets: [{
+          label: 'Student Count',
+          data: [4, 3, 2, 3, 2, 5, 5, 0, 8, 12, 5, 6, 4, 5, 1],
+          backgroundColor: 'rgba(184, 92, 42, 0.3)',
+          borderColor: '#B85C2A',
+          borderWidth: 1,
+          borderRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.parsed.y + ' students';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'JetBrains Mono', size: 10.5 }, color: '#6B6258' }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 2, font: { family: 'JetBrains Mono', size: 10.5 }, color: '#6B6258' },
+            grid: { color: 'rgba(27, 24, 20, 0.04)' },
+            title: {
+              display: true,
+              text: 'student count',
+              color: '#6B6258',
+              font: { family: 'DM Sans', size: 12, style: 'italic' },
+              padding: { bottom: 8 }
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('q1Slider').addEventListener('input', compute);
+    document.getElementById('q2Slider').addEventListener('input', compute);
+    document.getElementById('m1Slider').addEventListener('input', compute);
+    document.getElementById('m2Slider').addEventListener('input', compute);
     document.getElementById('finalSlider').addEventListener('input', compute);
 
-    renderQuizzes();
     compute();
   </script>
 </body>
