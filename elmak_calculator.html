@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELK356E ELMAK · Letter Grade Estimation Simulator</title>
+  <meta property="og:title" content="ELK356E ELMAK · Letter Grade Estimation Simulator">
+  <meta property="og:description" content="Calculate your estimated letter grade and see your percentile based on the 2025-2026 Spring Term histogram.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,30..100,0..1;1,9..144,300..700,30..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F2EDE3;
+      --surface: #FAF6EC;
+      --surface-2: #F7F2E7;
+      --ink: #1B1814;
+      --ink-soft: #2C2620;
+      --muted: #6B6258;
+      --muted-soft: #948C7F;
+      --hairline: #D9D1C2;
+      --hairline-soft: #E5DECE;
+      --accent: #B85C2A;
+      --accent-dim: rgba(184, 92, 42, 0.10);
+      --accent-line: rgba(184, 92, 42, 0.18);
+      --teal: #2E5066;
+      --display: 'Fraunces', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(184, 92, 42, 0.04), transparent 40%),
+        radial-gradient(circle at 95% 100%, rgba(46, 80, 102, 0.04), transparent 50%),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--hairline);
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 0;
+      color: var(--ink);
+      max-width: 700px;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+      color: var(--accent);
+    }
+
+    .header-meta {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--muted);
+      text-align: right;
+      max-width: 280px;
+    }
+
+    .header-meta strong {
+      font-style: normal;
+      font-weight: 500;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; gap: 2rem; }
+      .header-meta { text-align: left; }
+    }
+
+    /* Inputs panel */
+    .inputs-panel { display: flex; flex-direction: column; gap: 2rem; }
+
+    .input-section { display: flex; flex-direction: column; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-label .hint {
+      font-family: var(--sans);
+      font-style: italic;
+      font-size: 12px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--muted-soft);
+    }
+
+    .formula {
+      background: var(--surface);
+      border: 1px solid var(--hairline-soft);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .formula span { color: var(--accent); font-weight: 500; }
+
+    /* Quiz rows */
+    .quiz-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+    }
+
+    .quiz-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted-soft);
+      letter-spacing: 0.04em;
+      text-align: right;
+    }
+
+    .quiz-row.top .quiz-num { color: var(--accent); }
+
+    .quiz-input, .number-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 14.5px;
+      color: var(--ink);
+      transition: all 0.15s ease;
+    }
+
+    .quiz-input::placeholder, .number-input::placeholder {
+      color: var(--muted-soft);
+    }
+
+    .quiz-input:focus, .number-input:focus {
+      outline: none;
+      border-color: var(--ink);
+      background: #fff;
+    }
+
+    .quiz-row.top .quiz-input {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .quiz-row .badge {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: var(--surface);
+      padding: 2px 7px;
+      border: 1px solid var(--accent-line);
+      border-radius: 3px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .quiz-row.top .badge { opacity: 1; }
+
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted-soft);
+      cursor: pointer;
+      padding: 6px 10px;
+      font-size: 18px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .remove-btn:hover { color: var(--accent); background: var(--accent-dim); }
+
+    .add-quiz {
+      background: transparent;
+      border: 1px dashed var(--hairline);
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 13px;
+      transition: all 0.15s;
+      margin-top: 4px;
+      margin-left: 46px;
+    }
+
+    .add-quiz:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
+
+    .quiz-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      margin-left: 46px;
+      letter-spacing: 0.02em;
+      min-height: 1.2em;
+    }
+
+    .midterm-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .input-group label {
+      display: block;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Final slider */
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .slider-label {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .slider-value {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 2.6rem;
+      font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+      color: var(--accent);
+      line-height: 0.9;
+    }
+
+    .slider-value sup {
+      font-family: var(--mono);
+      font-size: 0.5em;
+      font-style: normal;
+      color: var(--muted);
+      margin-left: 4px;
+      letter-spacing: 0.04em;
+      vertical-align: top;
+      position: relative;
+      top: 0.3em;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      background: var(--hairline);
+      outline: none;
+      border-radius: 1px;
+      margin: 0.5rem 0 0.4rem;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: all 0.12s;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .slider::-webkit-slider-thumb:hover { transform: scale(1.08); }
+    .slider::-webkit-slider-thumb:active { transform: scale(1.15); }
+    .slider::-moz-range-thumb {
+      width: 22px; height: 22px;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 1px var(--accent);
+      border-radius: 50%; background: var(--accent); cursor: pointer;
+    }
+
+    .slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted-soft);
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    /* Results card */
+    .results-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 2rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .results-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--pct-fill, 0%), transparent var(--pct-fill, 0%));
+      transition: --pct-fill 0.3s;
+    }
+
+    .result-block {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .result-block:first-child { padding-top: 0; }
+    .result-block:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .result-label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .result-value {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: 3.4rem;
+      line-height: 1;
+      font-variation-settings: "opsz" 144, "SOFT" 50;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .result-value.muted { color: var(--muted-soft); }
+
+    .result-value.letter {
+      font-style: italic;
+      font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+      color: var(--accent);
+    }
+
+    .result-sub {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+
+    .result-sub.warn { color: var(--accent); }
+
+    /* Chart section */
+    .chart-section {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 2rem 2.25rem 1.5rem;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chart-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.5rem;
+      font-variation-settings: "opsz" 60, "SOFT" 100, "WONK" 1;
+      color: var(--ink);
+    }
+
+    .chart-subtitle {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 0.2rem;
+      max-width: 480px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 10px; border-radius: 2px; }
+    .legend-swatch.area { background: var(--accent-dim); border: 1px solid var(--accent-line); }
+    .legend-swatch.line { background: var(--accent); width: 14px; height: 2px; }
+    .legend-swatch.curve { background: transparent; border-bottom: 1.5px solid var(--ink); height: 1px; }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 360px;
+    }
+
+    /* Footnote */
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 800px;
+    }
+
+    footer p + p { margin-top: 0.75rem; }
+
+    footer code {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--ink-soft);
+      border: 1px solid var(--hairline-soft);
+    }
+
+    footer em {
+      font-family: var(--display);
+      font-style: italic;
+      font-variation-settings: "opsz" 60, "SOFT" 100;
+      color: var(--ink);
+    }
+
+    /* Subtle entry animation */
+    .container > * { animation: fadeUp 0.6s ease both; }
+    .container > *:nth-child(2) { animation-delay: 0.08s; }
+    .container > *:nth-child(3) { animation-delay: 0.16s; }
+    .container > *:nth-child(4) { animation-delay: 0.24s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1.5rem 1rem 3rem; }
+      .results-card, .chart-section { padding: 1.5rem; }
+      .result-value { font-size: 2.6rem; }
+      .slider-value { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <div class="eyebrow">ITU · 2025-2026 Spring Term</div>
+        <h1>ELK356E - <em>ELMAK</em></h1>
+      </div>
+      <div class="header-meta">
+        <strong>Letter Grade Estimation Simulator</strong>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="inputs-panel">
+        <div class="formula">
+          <span>10%</span> quiz &nbsp; <span>25%</span> M1 &nbsp; <span>25%</span> M2 &nbsp; <span>40%</span> final
+        </div>
+
+        <div class="input-section">
+          <div class="section-label">
+            <span>Quiz Grades</span>
+            <span class="hint">10%</span>
+          </div>
+          <div class="slider-header">
+            <span class="slider-label">Quiz 1</span>
+            <span class="slider-value"><span id="q1Value">95</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="q1Slider" class="slider" min="0" max="100" value="95" step="1">
+
+          <div class="slider-header" style="margin-top: 15px;">
+            <span class="slider-label">Quiz 2</span>
+            <span class="slider-value"><span id="q2Value">95</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="q2Slider" class="slider" min="0" max="100" value="95" step="1">
+        </div>
+
+        <div class="input-section">
+          <div class="section-label">
+            <span>Midterm Grades</span>
+            <span class="hint">25% each</span>
+          </div>
+          <div class="slider-header">
+            <span class="slider-label">Midterm 1</span>
+            <span class="slider-value"><span id="m1Value">64</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="m1Slider" class="slider" min="0" max="100" value="64" step="1">
+
+          <div class="slider-header" style="margin-top: 15px;">
+            <span class="slider-label">Midterm 2</span>
+            <span class="slider-value"><span id="m2Value">71</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="m2Slider" class="slider" min="0" max="100" value="71" step="1">
+        </div>
+
+        <div class="input-section">
+          <div class="section-label">
+            <span>Final Estimation</span>
+            <span class="hint">40%</span>
+          </div>
+          <div class="slider-header">
+            <span class="slider-label">Final</span>
+            <span class="slider-value"><span id="finalValue">71</span><sup>/100</sup></span>
+          </div>
+          <input type="range" id="finalSlider" class="slider" min="0" max="100" value="71" step="1">
+          <div class="slider-ticks">
+            <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-card">
+        <div class="result-block">
+          <div class="result-label">Weighted total</div>
+          <div class="result-value muted" id="totalValue">—</div>
+          <div class="result-sub" id="totalBreakdown">complete entries</div>
+        </div>
+        <div class="result-block">
+          <div class="result-label">Estimated letter grade</div>
+          <div class="result-value letter muted" id="letterValue">—</div>
+          <div class="result-sub" id="letterRange">waiting for threshold</div>
+        </div>
+        <div class="result-block">
+          <div class="result-label">Your percentile in distribution</div>
+          <div class="result-value muted" id="percentileValue">—</div>
+          <div class="result-sub" id="percentileSub">based on 2025-2026 spring term histogram</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">probability density</h2>
+          <p class="chart-subtitle">Continuous distribution fitted with a Gaussian kernel from the actual letter grade histogram of the previous term. Your grade's position is on the orange line.</p>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-swatch curve"></span>KDE</span>
+          <span class="legend-item"><span class="legend-swatch area"></span>area underneath</span>
+          <span class="legend-item"><span class="legend-swatch line"></span>your grade</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="distChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-section" style="margin-top: 2rem;">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">raw histogram</h2>
+          <p class="chart-subtitle">The original histogram data provided. We convert this discrete data into a continuous probability distribution using Gaussian Kernel Density Estimation (KDE) as shown above.</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <footer>
+      <p>The distribution was generated using Gaussian kernel density estimation (KDE) from the actual letter grade histogram of the 2025-2026 Spring term <em>Electromechanical Energy Conversion</em> course (65 students, 64 samples excluding VF). Each letter grade bucket was uniformly distributed into samples within its score range, then smoothed with a bandwidth of <code>h = 5</code>.</p>
+      <p>Letter grade thresholds are not based on the ITU absolute scale, but rather determined according to the histogram of the 2025-2026 Spring term Electromechanical Energy Conversion course.</p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>
+    const buckets = [
+      { name: 'FF',  min: 0,  max: 30, count: 5 },
+      { name: 'DD',  min: 30, max: 35, count: 4 },
+      { name: 'DD+', min: 35, max: 40, count: 6 },
+      { name: 'DC',  min: 40, max: 45, count: 5 },
+      { name: 'DC+', min: 45, max: 50, count: 12 },
+      { name: 'CC',  min: 50, max: 55, count: 8 },
+      { name: 'CC+', min: 55, max: 60, count: 0 },
+      { name: 'CB',  min: 60, max: 65, count: 5 },
+      { name: 'CB+', min: 65, max: 70, count: 5 },
+      { name: 'BB',  min: 70, max: 76, count: 2 },
+      { name: 'BB+', min: 76, max: 80, count: 3 },
+      { name: 'BA',  min: 80, max: 84, count: 2 },
+      { name: 'BA+', min: 84, max: 88, count: 3 },
+      { name: 'AA',  min: 88, max: 100, count: 4 }
+    ];
+
+    const samples = [];
+    buckets.forEach(b => {
+      for (let i = 0; i < b.count; i++) {
+        const t = (i + 0.5) / b.count;
+        samples.push(b.min + t * (b.max - b.min));
+      }
+    });
+    const N = samples.length;
+    const BW = 5;
+
+    function kdePdf(x) {
+      let sum = 0;
+      for (const xi of samples) {
+        const z = (x - xi) / BW;
+        sum += Math.exp(-0.5 * z * z);
+      }
+      return sum / (N * BW * Math.sqrt(2 * Math.PI));
+    }
+
+    function erf(x) {
+      const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+      const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+      const sign = x < 0 ? -1 : 1;
+      x = Math.abs(x);
+      const t = 1.0 / (1.0 + p * x);
+      const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+      return sign * y;
+    }
+    function normCdf(x) { return 0.5 * (1 + erf(x / Math.SQRT2)); }
+    function kdeCdf(x) {
+      let sum = 0;
+      for (const xi of samples) sum += normCdf((x - xi) / BW);
+      return sum / N;
+    }
+
+    const letterThresholds = [
+      { letter: 'AA',  min: 88 },
+      { letter: 'BA+', min: 84 },
+      { letter: 'BA',  min: 80 },
+      { letter: 'BB+', min: 76 },
+      { letter: 'BB',  min: 70 },
+      { letter: 'CB+', min: 65 },
+      { letter: 'CB',  min: 60 },
+      { letter: 'CC+', min: 55 },
+      { letter: 'CC',  min: 50 },
+      { letter: 'DC+', min: 45 },
+      { letter: 'DC',  min: 40 },
+      { letter: 'DD+', min: 35 },
+      { letter: 'DD',  min: 30 },
+      { letter: 'FF',  min: 0 }
+    ];
+
+    function getLetter(score) {
+      for (const t of letterThresholds) if (score >= t.min) return t.letter;
+      return 'FF';
+    }
+
+    function getLetterRange(letter) {
+      const i = letterThresholds.findIndex(t => t.letter === letter);
+      const min = letterThresholds[i].min;
+      const max = i === 0 ? 100 : letterThresholds[i - 1].min;
+      if (i === 0) return `in the ${min}–100 range`;
+      return `in the ${min}–${(max - 0.01).toFixed(2)} range`;
+    }
+
+    function compute() {
+      const q1 = Number(document.getElementById('q1Slider').value);
+      const q2 = Number(document.getElementById('q2Slider').value);
+      const m1 = Number(document.getElementById('m1Slider').value);
+      const m2 = Number(document.getElementById('m2Slider').value);
+      const f = Number(document.getElementById('finalSlider').value);
+
+      document.getElementById('q1Value').textContent = q1;
+      document.getElementById('q2Value').textContent = q2;
+      document.getElementById('m1Value').textContent = m1;
+      document.getElementById('m2Value').textContent = m2;
+      document.getElementById('finalValue').textContent = f;
+
+      const quizAvg = (q1 + q2) / 2;
+      let total = (quizAvg * 0.10) + (m1 * 0.25) + (m2 * 0.25) + (f * 0.40);
+
+      const parts = [
+        `Q ${(quizAvg * 0.10).toFixed(2)}`,
+        `M1 ${(m1 * 0.25).toFixed(2)}`,
+        `M2 ${(m2 * 0.25).toFixed(2)}`,
+        `F ${(f * 0.40).toFixed(2)}`
+      ];
+
+      const totalEl = document.getElementById('totalValue');
+      const breakdownEl = document.getElementById('totalBreakdown');
+      const letterEl = document.getElementById('letterValue');
+      const rangeEl = document.getElementById('letterRange');
+      const pctEl = document.getElementById('percentileValue');
+      const pctSubEl = document.getElementById('percentileSub');
+
+      totalEl.textContent = total.toFixed(2);
+      totalEl.classList.remove('muted');
+      breakdownEl.textContent = parts.join(' + ') + ' = ' + total.toFixed(2);
+      breakdownEl.classList.remove('warn');
+
+      const letter = getLetter(total);
+      letterEl.textContent = letter;
+      letterEl.classList.remove('muted');
+      rangeEl.textContent = getLetterRange(letter);
+
+      const pct = kdeCdf(total) * 100;
+      pctEl.textContent = `${pct.toFixed(1)}%`;
+      pctEl.classList.remove('muted');
+      pctSubEl.textContent = `above approximately ${(100 - pct).toFixed(0)}% of the class`;
+
+      document.documentElement.style.setProperty('--pct-fill', pct + '%');
+
+      updateChart(total);
+    }
+
+    const xs = [];
+    const ysAll = [];
+    for (let x = 0; x <= 100; x += 0.5) {
+      xs.push(x);
+      ysAll.push(kdePdf(x));
+    }
+
+    function splitData(score) {
+      if (score === null) return { below: ysAll.map(_ => null), above: ysAll };
+      const below = [];
+      const above = [];
+      for (let i = 0; i < xs.length; i++) {
+        below.push(xs[i] <= score ? ysAll[i] : null);
+        above.push(xs[i] >= score ? ysAll[i] : null);
+      }
+      return { below, above };
+    }
+
+    const ctx = document.getElementById('distChart');
+    let userScore = null;
+
+    const markerPlugin = {
+      id: 'marker',
+      afterDatasetsDraw(chart) {
+        const { ctx, chartArea, scales } = chart;
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(27, 24, 20, 0.06)';
+        ctx.lineWidth = 1;
+        const boundaries = [
+          { x: 30, l: 'DD' }, { x: 40, l: 'DC' }, { x: 50, l: 'CC' },
+          { x: 60, l: 'CB' }, { x: 70, l: 'BB' }, { x: 80, l: 'BA' }, { x: 88, l: 'AA' }
+        ];
+        ctx.fillStyle = '#948C7F';
+        ctx.font = '500 9px JetBrains Mono';
+        ctx.textAlign = 'center';
+        boundaries.forEach(b => {
+          const px = scales.x.getPixelForValue(b.x);
+          ctx.beginPath();
+          ctx.moveTo(px, chartArea.top + 20);
+          ctx.lineTo(px, chartArea.bottom);
+          ctx.stroke();
+          ctx.fillText(b.l, px, chartArea.top + 12);
+        });
+        ctx.restore();
+
+        if (userScore === null) return;
+        const x = scales.x.getPixelForValue(userScore);
+        ctx.save();
+        ctx.strokeStyle = '#B85C2A';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, chartArea.top + 30);
+        ctx.lineTo(x, chartArea.bottom);
+        ctx.stroke();
+
+        const labelY = chartArea.top + 16;
+        const label = userScore.toFixed(1);
+        ctx.font = '500 11px JetBrains Mono';
+        const labelW = ctx.measureText(label).width + 14;
+        ctx.fillStyle = '#B85C2A';
+        ctx.beginPath();
+        const r = 4;
+        const lx = x - labelW / 2, ly = labelY - 11, lw = labelW, lh = 18;
+        ctx.moveTo(lx + r, ly);
+        ctx.lineTo(lx + lw - r, ly);
+        ctx.quadraticCurveTo(lx + lw, ly, lx + lw, ly + r);
+        ctx.lineTo(lx + lw, ly + lh - r);
+        ctx.quadraticCurveTo(lx + lw, ly + lh, lx + lw - r, ly + lh);
+        ctx.lineTo(lx + r, ly + lh);
+        ctx.quadraticCurveTo(lx, ly + lh, lx, ly + lh - r);
+        ctx.lineTo(lx, ly + r);
+        ctx.quadraticCurveTo(lx, ly, lx + r, ly);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#FAF6EC';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, x, labelY);
+        ctx.restore();
+      }
+    };
+
+    Chart.register(markerPlugin);
+
+    const initial = splitData(null);
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: xs,
+        datasets: [
+          {
+            label: 'below',
+            data: initial.below,
+            borderColor: '#1B1814',
+            backgroundColor: 'rgba(184, 92, 42, 0.18)',
+            borderWidth: 1.5,
+            fill: 'origin',
+            pointRadius: 0,
+            tension: 0.35,
+            spanGaps: false
+          },
+          {
+            label: 'above',
+            data: initial.above,
+            borderColor: '#1B1814',
+            backgroundColor: 'rgba(27, 24, 20, 0.04)',
+            borderWidth: 1.5,
+            fill: 'origin',
+            pointRadius: 0,
+            tension: 0.35,
+            spanGaps: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 250, easing: 'easeOutQuad' },
+        interaction: { intersect: false, mode: 'nearest' },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: 100,
+            ticks: {
+              stepSize: 10,
+              color: '#6B6258',
+              font: { family: 'JetBrains Mono', size: 10.5 }
+            },
+            grid: { color: 'rgba(27, 24, 20, 0.04)', drawTicks: false },
+            border: { display: false },
+            title: {
+              display: true,
+              text: 'course grade',
+              color: '#6B6258',
+              font: { family: 'DM Sans', size: 12, style: 'italic' },
+              padding: { top: 8 }
+            }
+          },
+          y: { display: false, beginAtZero: true }
+        }
+      }
+    });
+
+    function updateChart(score) {
+      userScore = score;
+      const { below, above } = splitData(score);
+      chart.data.datasets[0].data = below;
+      chart.data.datasets[1].data = above;
+      chart.update();
+    }
+
+    const barCtx = document.getElementById('barChart');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['AA', 'BA+', 'BA', 'BB+', 'BB', 'CB+', 'CB', 'CC+', 'CC', 'DC+', 'DC', 'DD+', 'DD', 'FF', 'VF'],
+        datasets: [{
+          label: 'Student Count',
+          data: [4, 3, 2, 3, 2, 5, 5, 0, 8, 12, 5, 6, 4, 5, 1],
+          backgroundColor: 'rgba(184, 92, 42, 0.3)',
+          borderColor: '#B85C2A',
+          borderWidth: 1,
+          borderRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.parsed.y + ' students';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'JetBrains Mono', size: 10.5 }, color: '#6B6258' }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 2, font: { family: 'JetBrains Mono', size: 10.5 }, color: '#6B6258' },
+            grid: { color: 'rgba(27, 24, 20, 0.04)' },
+            title: {
+              display: true,
+              text: 'student count',
+              color: '#6B6258',
+              font: { family: 'DM Sans', size: 12, style: 'italic' },
+              padding: { bottom: 8 }
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('q1Slider').addEventListener('input', compute);
+    document.getElementById('q2Slider').addEventListener('input', compute);
+    document.getElementById('m1Slider').addEventListener('input', compute);
+    document.getElementById('m2Slider').addEventListener('input', compute);
+    document.getElementById('finalSlider').addEventListener('input', compute);
+
+    compute();
+  </script>
+</body>
+</html>
